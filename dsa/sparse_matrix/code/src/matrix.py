@@ -46,7 +46,9 @@ class SparseMatrix:
             except ValueError:
                 raise InvalidMatrixFormat("Cols value must be an integer.")
 
-            # Parse elements
+            self.elements.clear()
+
+            # Parse elements (NO boundary checks here)
             for line in lines[2:]:
                 if not (line.startswith("(") and line.endswith(")")):
                     raise InvalidMatrixFormat(f"Invalid element line format: {line}")
@@ -59,10 +61,7 @@ class SparseMatrix:
                 except ValueError:
                     raise InvalidMatrixFormat(f"Element values must be integers: {line}")
 
-                # Check indices are within bounds
-                if not (0 <= row < self.rows) or not (0 <= col < self.cols):
-                    raise InvalidMatrixFormat(f"Element position out of bounds: ({row}, {col})")
-
+                # No boundary check: add element directly
                 self.elements[(row, col)] = val
 
         print("Loading complete.\n")

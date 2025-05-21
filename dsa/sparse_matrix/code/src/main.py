@@ -7,7 +7,7 @@ def get_base_dirs():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.abspath(os.path.join(script_dir, '..', '..'))
     input_dir = os.path.join(base_dir, 'sample_inputs')
-    output_dir = os.path.join(base_dir, 'results')
+    output_dir = os.path.join(base_dir, 'sample_outputs')
     return input_dir, output_dir
 
 def list_files(input_dir):
@@ -38,21 +38,24 @@ def generate_output_filename(output_dir, operation):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     return os.path.join(output_dir, f"result_{operation}_{timestamp}.txt")
 
-def display_or_save_result(matrix, filename, label, threshold=20):
+def display_or_save_result(matrix, filename, label):
     non_zero_elements = sorted((key, val) for key, val in matrix.elements.items() if val != 0)
     if len(non_zero_elements) == 0:
         print(f"\n🧾 Result of {label} is an empty matrix (all zeros).")
         return
-    if len(non_zero_elements) <= threshold:
+    
+    # For small matrix, print on console
+    if matrix.rows <= 20 and matrix.cols <= 20:
         print(f"\n🧾 Result of {label} ({matrix.rows}x{matrix.cols}):")
         for (i, j), val in non_zero_elements:
             print(f"({i}, {j}, {val})")
     else:
+        # For large matrix, save to file
         with open(filename, 'w') as f:
             f.write(f"Result of {label} ({matrix.rows}x{matrix.cols}):\n")
             for (i, j), val in non_zero_elements:
                 f.write(f"({i}, {j}, {val})\n")
-        print(f"\n📄 Result has {len(non_zero_elements)} entries, saved to: {filename}")
+        print(f"\n📄 Result saved to: {filename}")
 
 def main():
     try:
