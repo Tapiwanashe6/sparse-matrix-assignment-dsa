@@ -1,0 +1,4 @@
+Result of Matrix A * Matrix B (3x3):
+(0, 0, 4)
+(0, 2, 12)
+(1, 1, 15)
